@@ -77,7 +77,10 @@ module Sidekiq
     # For some reason, Celluloid's thread dispatch, TaskThread,
     # is unstable under heavy concurrency but TaskFiber has proven
     # itself stable.
-    NEED_DEFER = (RUBY_ENGINE == 'ruby' && RUBY_VERSION < '2.0.0')
+    #
+    # EMEX CHANGE: It seems we need to defer on 2.3.0 on EY when we
+    # attempt to load the JVM via RJB.
+    NEED_DEFER = RUBY_ENGINE == 'ruby'
 
     def do_defer(&block)
       if NEED_DEFER
